@@ -55,7 +55,7 @@ variable "domain_name" {
 variable "deploy_count" {
   type        = number
   description = "Change this for the number of users of the playground"
-  default     = 1
+  default     = 5
 }
 variable "InstanceRole" {
   type        = number

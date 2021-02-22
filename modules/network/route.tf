@@ -1,5 +1,5 @@
 resource "aws_route_table" "public_route_table" {
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.vpc.0.id
 
   tags = {
     Name    = var.PlaygroundName
@@ -14,7 +14,7 @@ resource "aws_route" "public_route_to_igw" {
 
 resource "aws_route_table" "private_route_table" {
   count  = var.private_subnets > 0 ? 1 : 0
-  vpc_id = aws_vpc.vpc.id
+  vpc_id = aws_vpc.vpc[count.index].id
 
   tags = {
     Name    = var.PlaygroundName
