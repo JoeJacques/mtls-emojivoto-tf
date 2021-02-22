@@ -2,6 +2,8 @@ locals {
   adj = jsondecode(file("./adjectives.json"))
 }
 
+
+
 module "network" {
   count            = var.deploy_count
   source           = "./modules/network"
@@ -21,7 +23,7 @@ module "puppet" {
     "${var.scriptLocation}/puppet.sh",
     {
       hostname = "playground"
-      username = "puppet"
+      username = "puppet-user"
       ssh_pass = "playground"
       region   = var.region
       gitrepo  = "https://github.com/chilcano/mtls-emojivoto-tf.git"
@@ -49,6 +51,7 @@ module "ca" {
       gitrepo    = "https://github.com/chilcano/mtls-emojivoto-tf.git"
       puppet_url = "${var.PlaygroundName}-puppet-${element(local.adj, count.index)}-panda"
     }
+  
   )
   amiName  = "ubuntu/images/hvm-ssd/ubuntu-bionic-18.04-amd64-server-*"
   amiOwner = "099720109477"
@@ -108,6 +111,11 @@ module "voting" {
   security_group_ids = [module.network[count.index].allow_all_security_group_id]
   subnet_id          = module.network[count.index].public_subnets.0
   instance_type      = var.instance_type
+
+  provisioner "file" {
+    source      = "conf/myapp.conf"
+    destination = "/etc/myapp.conf"
+  }
   user_data = templatefile(
     "${var.scriptLocation}/ca.sh",
     {

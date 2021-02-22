@@ -5,7 +5,7 @@ sudo apt-get install -y language-pack-en
 sudo apt-get -y install puppet-master puppet-module-puppetlabs-stdlib
 sudo puppet config set --section master autosign true
 sudo systemctl restart puppet-master
-sudo chown ubuntu:ubuntu /etc/puppet/code
+sudo chown ${username}:${username} /etc/puppet/code
 
 echo "--> Setting hostname..."
 echo "${hostname}" | sudo tee /etc/hostname
@@ -53,4 +53,5 @@ sudo mkdir /home/${username}/workdir
 sudo chown -R ${username} /home/${username}/workdir
 cd /home/${username}/workdir
 sudo git clone ${gitrepo}
-sudo mv workdir/mtls-emojivoto-tf/conf/puppet/code/environments/*  ~/etc/puppet/code
+
+sudo mv workdir/mtls-emojivoto-tf/conf/puppet/code/environments/*  /home/${username}/etc/puppet/code
